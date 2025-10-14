@@ -4,12 +4,12 @@ console.log('第一幅画数据:', paintings[0]);
 // 1. 名画数据数组：这里存放所有名画的信息
 const paintings = [
     {
-        imageUrl: ‘images/Generated Image.png', // 替换为你的图片路径
-        title: ‘星月夜’,
-        artist: ‘文森特·梵高’,
-        year: ‘1889’,
-        style: ‘后印象派’,
-        description: ‘这幅画描绘了一个夸张化与充满强烈表现力的星空下的村庄。’
+        imageUrl: 'images/Generated Image.png', // 替换为你的图片路径
+        title: '星月夜',
+        artist: '文森特·梵高',
+        year: '1889',
+        style: '后印象派',
+        description: '这幅画描绘了一个夸张化与充满强烈表现力的星空下的村庄。'
     },
     {
         imageUrl: ‘images/mona_lisa.jpg’,
