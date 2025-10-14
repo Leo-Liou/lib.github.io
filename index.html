@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世界名画随机美术馆</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>世界名画随机美术馆</h1>
+        <p>每次刷新都将带给你一场独特的艺术之旅</p>
+    </header>
+
+    <main>
+        <!-- 图片展示区域 -->
+        <figure id="painting-display">
+            <img id="painting-image" src="" alt="随机名画">
+            <figcaption id="painting-caption">点击按钮或等待片刻，欣赏下一幅名画</figcaption>
+        </figure>
+
+        <!-- 控制按钮 -->
+        <div class="controls">
+            <button id="refresh-btn">随机下一幅</button>
+            <button id="auto-refresh-btn">开启自动轮播（3秒/幅）</button>
+        </div>
+
+        <!-- 名画信息表格 -->
+        <section class="painting-info">
+            <h2>画作赏析</h2>
+            <table id="info-table">
+                <tr>
+                    <th>画作名称</th>
+                    <td id="info-title">-</td>
+                </tr>
+                <tr>
+                    <th>艺术家</th>
+                    <td id="info-artist">-</td>
+                </tr>
+                <tr>
+                    <th>创作年代</th>
+                    <td id="info-year">-</td>
+                </tr>
+                <tr>
+                    <th>风格流派</th>
+                    <td id="info-style">-</td>
+                </tr>
+                <tr>
+                    <th>作品简介</th>
+                    <td id="info-desc">-</td>
+                </tr>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 世界名画随机美术馆</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
