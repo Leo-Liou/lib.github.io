@@ -45,7 +45,7 @@ function getRandomPainting() {
     // 生成一个随机索引 (核心逻辑)
     const randomIndex = Math.floor(Math.random() * paintings.length);
     // 根据随机索引从数组中获取一幅画的数据
-    const randomPainting = paintings[randomIndex];
+    const randomPainting = paintings[0];
 
     // 更新图片和提示文字
     paintingImage.src = randomPainting.imageUrl;
