@@ -1,7 +1,7 @@
 // 1. 名画数据数组：这里存放所有名画的信息
 const paintings = [
     {
-        imageUrl: ‘images/starry_night.jpg', // 替换为你的图片路径
+        imageUrl: ‘images/Generated Image September 26, 2025 - 3_04PM.png', // 替换为你的图片路径
         title: ‘星月夜’,
         artist: ‘文森特·梵高’,
         year: ‘1889’,
