@@ -1,6 +1,3 @@
-// 在script.js开头添加调试代码，检查数据
-console.log('图片数据总数:', paintings.length);
-console.log('第一幅画数据:', paintings[0]);
 // 1. 名画数据数组：这里存放所有名画的信息
 const paintings = [
     {
