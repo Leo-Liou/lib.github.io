@@ -9,12 +9,12 @@ const paintings = [
         description: '这幅画描绘了一个夸张化与充满强烈表现力的星空下的村庄。'
     },
     {
-        imageUrl: 'images/mona_lisa.jpg',
-        title: '蒙娜丽莎',
-        artist: '列奥纳多·达·芬奇',
-        year: '1503-1506',
-        style: '文艺复兴',
-        description: '以其神秘的微笑而闻名于世，是卢浮宫的镇馆之宝。'
+        imageUrl: 'images/washington.jpg',
+        title: 'Washington Crossing the Delaware',
+        artist: 'Emanuel Leutze',
+        year: '1851',
+        style: 'based on a photograph',
+        description: '引发关于政治思想的思辩'
     },
     {
         imageUrl: 'images/the_scream.jpg',
