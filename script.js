@@ -17,7 +17,7 @@ const paintings = [
         description: '引发关于政治思想的思辩'
     },
     {
-        imageUrl: 'images/the_scream.jpg',
+        imageUrl: 'images/The scream.jpg',
         title: '呐喊',
         artist: '爱德华·蒙克',
         year: '1893',
