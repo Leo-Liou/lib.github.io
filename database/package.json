@@ -1,0 +1,16 @@
+{
+  "name": "art-database-automation",
+  "version": "1.0.0",
+  "description": "自动化充实名画数据库",
+  "type": "module",
+  "scripts": {
+    "start": "node met-art-automation.js",
+    "update": "node met-art-automation.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
