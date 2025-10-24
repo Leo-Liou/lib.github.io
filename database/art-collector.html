@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名画收藏家 - 自动化数据收集</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            display: none;
+        }
+        .artwork {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .loading {
+            color: #7f8c8d;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 名画收藏家 - 数据自动化收集</h1>
+        <p>点击按钮，自动从大都会博物馆获取名画数据！</p>
+        
+        <button onclick="startCollection()">开始收集名画数据</button>
+        <button onclick="saveData()" id="saveBtn" style="display:none; background:#27ae60;">保存数据到文件</button>
+        
+        <div id="loading" class="loading" style="display:none;">
+            <p>正在从大都会博物馆获取数据中... 请稍等 ⏳</p>
+        </div>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        // 存储收集到的数据
+        let collectedPaintings = [];
+
+        async function startCollection() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            try {
+                // 1. 搜索大都会博物馆的精选绘画
+                const searchUrl = 'https://collectionapi.metmuseum.org/public/collection/v1/search?isHighlight=true&departmentId=11&hasImages=true&q=painting';
+                
+                console.log('🔍 搜索博物馆数据...');
+                const searchResponse = await fetch(searchUrl);
+                const searchData = await searchResponse.json();
+                
+                if (!searchData.objectIDs || searchData.objectIDs.length === 0) {
+                    throw new Error('没有找到作品数据');
+                }
+                
+                // 只取前5个作品（避免请求太多）
+                const artworkIDs = searchData.objectIDs.slice(0, 5);
+                collectedPaintings = [];
+                
+                // 2. 逐个获取作品详情
+                for (let i = 0; i < artworkIDs.length; i++) {
+                    const objectID = artworkIDs[i];
+                    console.log(`📥 获取作品 ${i+1}/${artworkIDs.length} (ID: ${objectID})`);
+                    
+                    // 更新加载信息
+                    document.getElementById('loading').innerHTML = 
+                        `<p>正在获取第 ${i+1} 幅作品... 共 ${artworkIDs.length} 幅</p>`;
+                    
+                    const objectUrl = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`;
+                    const objectResponse = await fetch(objectUrl);
+                    const artworkData = await objectResponse.json();
+                    
+                    // 检查数据是否完整
+                    if (artworkData.primaryImage && artworkData.title && artworkData.artistDisplayName) {
+                        // 转换数据格式
+                        const painting = {
+                            imageUrl: artworkData.primaryImage,
+                            title: artworkData.title,
+                            artist: artworkData.artistDisplayName,
+                            year: artworkData.objectDate || '年代未知',
+                            style: getArtStyle(artworkData),
+                            description: generateDescription(artworkData)
+                        };
+                        
+                        collectedPaintings.push(painting);
+                    }
+                    
+                    // 等待一下，避免请求太快
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+                
+                // 3. 显示结果
+                showResults();
+                
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result').innerHTML = 
+                    `<p style="color: red;">❌ 出错啦：${error.message}</p>
+                     <p>请检查网络连接，或稍后再试。</p>`;
+                document.getElementById('result').style.display = 'block';
+            }
+        }
+
+        // 推断艺术风格
+        function getArtStyle(artworkData) {
+            const medium = artworkData.medium || '';
+            if (medium.includes('Oil')) return '油画';
+            if (medium.includes('Watercolor')) return '水彩画';
+            if (medium.includes('Ink')) return '水墨画';
+            return '绘画';
+        }
+
+        // 生成作品描述
+        function generateDescription(artworkData) {
+            return `《${artworkData.title}》是${artworkData.artistDisplayName}的${getArtStyle(artworkData)}作品。${
+                artworkData.objectDate ? `创作于${artworkData.objectDate}年。` : ''
+            }现藏于纽约大都会艺术博物馆。`;
+        }
+
+        // 显示收集结果
+        function showResults() {
+            document.getElementById('loading').style.display = 'none';
+            
+            let html = `<h3>🎉 成功收集到 ${collectedPaintings.length} 幅名画！</h3>`;
+            
+            collectedPaintings.forEach((painting, index) => {
+                html += `
+                <div class="artwork">
+                    <h4>${index + 1}. ${painting.title}</h4>
+                    <p><strong>艺术家：</strong>${painting.artist}</p>
+                    <p><strong>创作年代：</strong>${painting.year}</p>
+                    <p><strong>艺术形式：</strong>${painting.style}</p>
+                    <p><strong>描述：</strong>${painting.description}</p>
+                    
+                </div>`;
+            });
+            
+            document.getElementById('result').innerHTML = html;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('saveBtn').style.display = 'inline-block';
+        }
+
+        // 保存数据到文件
+        function saveData() {
+            if (collectedPaintings.length === 0) {
+                alert('请先收集数据！');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(collectedPaintings, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my-art-collection.json';
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            alert(`✅ 成功保存 ${collectedPaintings.length} 幅名画数据到文件！`);
+        }
+
+        // 页面加载完成后的提示
+        window.onload = function() {
+            console.log('🎨 名画收集器已准备好！');
+        };
+    </script>
+</body>
+</html>
